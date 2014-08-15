@@ -279,10 +279,17 @@ $.fn.getSelectionEnd = function(o)
 		return undefined;
 	}
 	else if (o.createTextRange) {
-		var r = document.selection.createRange().duplicate()
-		r.moveStart('character', -o.value.length)
-		return r.text.length
-	} else return o.selectionEnd
+		if (typeof document.selection ==  'undefined'){
+	            r = document.getSelection();
+	        } else {
+	            r = document.selection.createRange().duplicate();
+	            r.moveStart('character', -o.value.length);
+	        }
+	        if ( typeof r.text == 'undefined') return o.value.length;
+
+		return r.text.length;
+	} else 
+		return o.selectionEnd;
 }
 
 // set the selection, o is the object (input), p is the position ([start, end] or just start)
